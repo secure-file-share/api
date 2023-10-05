@@ -70,6 +70,7 @@ MIDDLEWARE = [
     'threadlocals.middleware.ThreadLocalMiddleware',
 
     # CUSTOM MIDDLEWARES
+    'alpha.middlewares.VerifyAPIKeyMiddleware',
 ]
 
 ROOT_URLCONF = 'securefileshare.urls'
