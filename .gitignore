@@ -21,6 +21,7 @@ media
 *$py.class
 
 ### VisualStudioCode ###
+.vscode
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
