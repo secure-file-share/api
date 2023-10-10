@@ -34,9 +34,17 @@ class User(AbstractUser):
 class UserMeta(Timestamp):
     """Meta data of users"""
 
+    USER_LEVEL = (
+        (0, "Admin"),
+        (1, "Board"),
+        (2, "Employee"),
+        (3, "Other"),
+    )
+
     user = models.OneToOneField(
         User, related_name="meta", on_delete=models.CASCADE)
-    level = models.PositiveIntegerField()
+    level = models.PositiveIntegerField(
+        choices=USER_LEVEL, help_text="User Privilege Level", default=3)
     organization = models.ForeignKey(
         "organization.Organization", related_name="users", on_delete=models.PROTECT)
 
