@@ -52,6 +52,9 @@ INSTALLED_APPS = [
 
     # CUSTOM APPS
     'alpha',
+    'client',
+    'fileshare',
+    'organization',
 ]
 
 MIDDLEWARE = [
@@ -123,7 +126,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# AUTH_USER_MODEL = 'client.User'
+AUTH_USER_MODEL = 'client.User'
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
