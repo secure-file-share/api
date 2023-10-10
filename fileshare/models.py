@@ -43,3 +43,33 @@ class Files(TimestampWithRecord):
             return self.name
 
         return f"File instance of {self.organization.name}"
+
+    def get_organization_name(self):
+        """Return organization name."""
+
+        return self.organization.name
+
+
+class FileShare(TimestampWithRecord):
+    """
+    File Share data model
+
+    ---
+    file : Files (Django)
+    shared_to : User (Django)
+    unique_code : Char
+    """
+
+    file_instance = models.ForeignKey(
+        Files, related_name="share", on_delete=models.CASCADE)
+    shared_to = models.ForeignKey(
+        "client.User", related_name="shared_files", on_delete=models.CASCADE)
+    unique_code = models.CharField(
+        max_length=50, help_text="Unique code used for creating sharing links", unique=True)
+
+    class Meta:
+        verbose_name = "File Share"
+        verbose_name_plural = "File Share"
+
+    def __str__(self):
+        return f"{self.file_instance.get_organization_name()} | {self.unique_code}"

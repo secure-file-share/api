@@ -1,7 +1,8 @@
 import os
 import pytz
-from datetime import datetime, timedelta
 from django.conf import settings
+from datetime import datetime, timedelta
+from alpha.utilities import random_string
 
 
 def get_file_upload_path(instance, filename):
@@ -17,3 +18,8 @@ def get_file_upload_path(instance, filename):
 def get_file_expiration_date():
     """Returns datetime instance of 1 week from now"""
     return datetime.now().astimezone(pytz.timezone(settings.TIME_ZONE)) + timedelta(days=7)
+
+
+def get_unique_code():
+    """Returns random string of 50 length."""
+    return random_string(length=50)
