@@ -10,8 +10,15 @@ class Organization(TimestampWithRecord):
     ---
     Fields
 
-    created_by : User (Django)
-    updated_by : User (Django)
+    name : Char
+    phone : Char
+    address_street1 : Char
+    address_street2 : Char
+    address_city : Char
+    address_state : Char
+    address_country : Char
+    address_zip : Char
+    secret_code : Char
     """
 
     # BASIC INFO
