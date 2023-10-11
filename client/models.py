@@ -46,7 +46,7 @@ class UserMeta(Timestamp):
     level = models.PositiveIntegerField(
         choices=USER_LEVEL, help_text="User Privilege Level", default=3)
     organization = models.ForeignKey(
-        "organization.Organization", related_name="users", on_delete=models.PROTECT)
+        "organization.Organization", related_name="users", on_delete=models.PROTECT, null=True)
 
     class Meta:
         verbose_name = "User Meta"
