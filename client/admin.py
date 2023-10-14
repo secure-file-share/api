@@ -9,6 +9,9 @@ class UserMetaAdmin(admin.StackedInline):
     model = UserMeta
     extra = 0
 
+    def has_delete_permission(self, request, obj):
+        return False
+
 
 class MyUserAdmin(UserAdmin):
     # The forms to add and change user instances
