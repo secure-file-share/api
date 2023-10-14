@@ -16,7 +16,7 @@ class User(AbstractUser):
         ordering = ["-date_joined"]
 
     def __str__(self):
-        return self.email
+        return self.username
 
     @property
     def full_name(self):
