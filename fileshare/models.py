@@ -44,6 +44,10 @@ class Files(TimestampWithRecord):
 
         return f"File instance of {self.organization.name}"
 
+    @property
+    def file(self):
+        return self.file_instance
+
     def get_organization_name(self):
         """Return organization name."""
 
