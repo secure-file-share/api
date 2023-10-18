@@ -10,4 +10,4 @@ def create_user_meta(sender, instance, **kwargs):
     """
 
     if kwargs.get("created"):
-        UserMeta.objects.create(user=instance)
+        UserMeta.objects.get_or_create(user=instance)
