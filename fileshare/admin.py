@@ -24,4 +24,21 @@ class FilesAdmin(admin.ModelAdmin):
         return "{:0.2f} MB".format(obj.size/1024)
 
 
+class FileShareAdmin(admin.ModelAdmin):
+    model = FileShare
+
+    list_display = ("unique_code", "file_name", "organization")
+    search_fields = ("unique_code", "file_instance__name",
+                     "file_instance__organization__name",)
+
+    readonly_fields = ("unique_code",)
+
+    def file_name(self, obj):
+        return f"{obj.file_instance.name}.{obj.file_instance.ext}"
+
+    def organization(self, obj):
+        return obj.file_instance.organization.name
+
+
 admin.site.register(Files, FilesAdmin)
+admin.site.register(FileShare, FileShareAdmin)

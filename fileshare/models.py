@@ -1,6 +1,6 @@
 from django.db import models
 from alpha.extra_models import TimestampWithRecord
-from .utilities import get_file_upload_path, get_file_expiration_date
+from .utilities import get_file_upload_path, get_file_expiration_date, get_unique_code
 
 
 class Files(TimestampWithRecord):
@@ -69,7 +69,7 @@ class FileShare(TimestampWithRecord):
     shared_to = models.ForeignKey(
         "client.User", related_name="shared_files", on_delete=models.CASCADE)
     unique_code = models.CharField(
-        max_length=50, help_text="Unique code used for creating sharing links", unique=True)
+        max_length=50, default=get_unique_code, help_text="Unique code used for creating sharing links", unique=True)
 
     class Meta:
         verbose_name = "File Share"
