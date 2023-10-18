@@ -7,7 +7,7 @@ from .forms import UserChangeForm, UserCreationForm, GroupAdminForm
 
 class UserMetaAdmin(admin.StackedInline):
     model = UserMeta
-    extra = 0
+    extra = 1
 
     def has_delete_permission(self, request, obj):
         return False
