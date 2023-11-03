@@ -1,8 +1,9 @@
 import os
 import pytz
+from random import randint
 from django.conf import settings
 from datetime import datetime, timedelta
-from alpha.utilities import random_string
+# from alpha.utilities import random_string
 
 
 def get_file_upload_path(instance, filename):
@@ -21,5 +22,9 @@ def get_file_expiration_date():
 
 
 def get_unique_code():
-    """Returns random string of 50 length."""
-    return random_string(length=50)
+    # """Returns random string of 50 length."""
+    # return random_string(length=50)
+
+    # SO USERS CAN USE THIS CODE TO RETRIEVE FILE AS WELL
+    """Returns random 6 digit code."""
+    return randint(100000, 999999)

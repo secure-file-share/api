@@ -1,3 +1,4 @@
+from django.urls import reverse
 from rest_framework import serializers
 from alpha.serializers import BaseSerializer
 from .models import Files, FileShare
@@ -73,6 +74,7 @@ class FileShareSerializer(BaseSerializer):
     file = serializers.SerializerMethodField("get_file")
     shared_to = serializers.SerializerMethodField("get_shared_to")
     shared_by = serializers.SerializerMethodField("get_shared_by")
+    share_link = serializers.SerializerMethodField("get_share_link")
 
     class Meta:
         model = FileShare
@@ -80,7 +82,9 @@ class FileShareSerializer(BaseSerializer):
             "id",
             "file",
             "shared_to",
+            "shared_by",
             "unique_code",
+            "share_link",
             "created_at",
             "updated_at",
             "created_by",
@@ -103,3 +107,6 @@ class FileShareSerializer(BaseSerializer):
             "username": obj.shared_to.username,
             "fullname": obj.shared_to.full_name
         }
+
+    def get_share_link(self, obj):
+        return reverse("fileshare:fileshare-list") + "{}/".format(obj.id)
