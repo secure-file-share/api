@@ -30,6 +30,10 @@ class User(AbstractUser):
 
         return ""
 
+    @property
+    def organization(self):
+        return self.meta.organization
+
 
 class UserMeta(Timestamp):
     """Meta data of users"""
