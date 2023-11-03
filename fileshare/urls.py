@@ -7,6 +7,7 @@ app_name = "fileshare"
 # REST API ROUTER
 router = routers.SimpleRouter()
 
+router.register(r'fileshare', viewsets.FileShareViewSet, basename='fileshare')
 
 # URLS
 urlpatterns = []
