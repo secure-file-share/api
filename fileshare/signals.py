@@ -2,7 +2,7 @@ import os
 from django.db import models
 from django.conf import settings
 from django.dispatch import receiver
-from .models import Files
+from .models import Files, FileShare
 
 
 @receiver(models.signals.pre_save, sender=Files)
@@ -78,3 +78,12 @@ def update_file(sender, instance, **kwargs):
                     os.remove(old_file.path)
             except:
                 pass
+
+
+@receiver(models.signals.post_delete, sender=FileShare)
+def delete_file_share(sender, instance, **kwargs):
+    """
+    Delete file after deletion of its file share link.
+    """
+
+    instance.file_instance.delete()
