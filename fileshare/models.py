@@ -77,3 +77,8 @@ class FileShare(TimestampWithRecord):
 
     def __str__(self):
         return f"{self.file_instance.get_organization_name()} | {self.unique_code}"
+
+    @property
+    def shared_by(self):
+        """User who shared this file"""
+        return self.created_by
