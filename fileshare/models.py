@@ -82,3 +82,7 @@ class FileShare(TimestampWithRecord):
     def shared_by(self):
         """User who shared this file"""
         return self.created_by
+
+    @property
+    def organization(self):
+        return self.file_instance.organization
