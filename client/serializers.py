@@ -30,11 +30,18 @@ class UserSerializer(BaseSerializer):
         )
 
     def get_last_login(self, obj):
-        return {
-            "datetime": parse_date(obj.last_login),
-            "relative": relative_date(obj.last_login),
-            "timestamp": obj.last_login.timestamp(),
-        }
+        if obj.last_login:
+            return {
+                "datetime": parse_date(obj.last_login),
+                "relative": relative_date(obj.last_login),
+                "timestamp": obj.last_login.timestamp(),
+            }
+        else:
+            return {
+                "datetime": None,
+                "relative": None,
+                "timestamp": None,
+            }
 
     def get_level(self, obj):
         return {
