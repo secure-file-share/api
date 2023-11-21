@@ -8,7 +8,7 @@ class FileSerializer(BaseSerializer):
     """File Serializer"""
 
     size = serializers.SerializerMethodField("get_size")
-    shares = serializers.SerializerMethodField("get_shares")
+    # shares = serializers.SerializerMethodField("get_shares")
     organization = serializers.SerializerMethodField("get_organization")
     uploaded_by = serializers.SerializerMethodField("get_uploaded_by")
 
@@ -19,8 +19,8 @@ class FileSerializer(BaseSerializer):
             "name",
             "ext",
             "size",
-            "file",
-            "shares",
+            # "file",
+            # "shares",
             "organization",
             "uploaded_by",
             "expiration",
@@ -36,21 +36,21 @@ class FileSerializer(BaseSerializer):
             "megabytes": float("{:0.2f}".format(obj.size/1024))
         }
 
-    def get_shares(self, obj):
-        return [
-            {
-                "id": str(share.id),
-                "shared_by": {
-                    "id": str(share.created_by.id),
-                    "username": share.created_by.username
-                },
-                "shared_to": {
-                    "id": str(share.shared_to.id),
-                    "username": share.shared_to.username
-                },
-                "unique_code": share.unique_code
-            }
-            for share in obj.share.all()]
+    # def get_shares(self, obj):
+    #     return [
+    #         {
+    #             "id": str(share.id),
+    #             "shared_by": {
+    #                 "id": str(share.created_by.id),
+    #                 "username": share.created_by.username
+    #             },
+    #             "shared_to": {
+    #                 "id": str(share.shared_to.id),
+    #                 "username": share.shared_to.username
+    #             },
+    #             "unique_code": share.unique_code
+    #         }
+    #         for share in obj.share.all()]
 
     def get_organization(self, obj):
         return {
