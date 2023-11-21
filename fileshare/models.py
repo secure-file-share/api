@@ -48,6 +48,10 @@ class Files(TimestampWithRecord):
     def file(self):
         return self.file_instance
 
+    @property
+    def uploaded_by(self):
+        return self.created_by
+
     def get_organization_name(self):
         """Return organization name."""
 
@@ -86,3 +90,11 @@ class FileShare(TimestampWithRecord):
     @property
     def organization(self):
         return self.file_instance.organization
+
+    @property
+    def name(self):
+        return self.file_instance.name
+
+    @property
+    def file(self):
+        return self.file_instance.file
