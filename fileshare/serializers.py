@@ -92,7 +92,7 @@ class FileShareSerializer(BaseSerializer):
         )
 
     def get_file(self, obj):
-        return FileSerializer(obj.file).data
+        return FileSerializer(obj.file_instance).data
 
     def get_shared_by(self, obj):
         return {
