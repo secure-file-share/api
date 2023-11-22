@@ -3,7 +3,6 @@ import base64
 from datetime import datetime
 from django.conf import settings
 from django.core.files import File
-from django.core.files.temp import NamedTemporaryFile
 from alpha.utilities import parse_date
 from base64 import b64encode, b64decode
 from cryptography.fernet import Fernet
@@ -111,30 +110,33 @@ def encrypt_file(key, file_instance):
     return encrypted_file
 
 
-def decrypt_file(key, file_name, path):
+def decrypt_file(key, file_instance):
     """
     Decrypt file.
     The temporary decryption file is not deleted by this function!
     """
 
-    with open(path, "r") as read_file:
-        # READ FILE
-        content = read_file.read()
+    # DECRYPTION KEY
+    key = generate_key(key)
 
-        # READ META INFORMATION
-        meta = content.split(SEPARATOR)[0]
+    # READ FILE
+    content = file_instance.read().decode("utf-8")
 
-        # GET ORIGINAL FILE EXTENSION FROM HEADER
-        ext = ".{}".format(
-            meta.split(" | ")[0]
-        )
+    # READ META INFORMATION
+    meta = content.split(SEPARATOR)[0]
 
-        # CREATE ORIGINAL FILE NAME
-        file_name += ext
-        file_path = settings.BASE_PATH / "temp" / file_name
+    # GET ORIGINAL FILE EXTENSION FROM HEADER
+    ext = ".{}".format(
+        meta.split(" | ")[0]
+    )
 
-        # GET FILE CONTENTS
-        file_content = content.split(SEPARATOR)[-1].encode()
+    # CREATE ORIGINAL FILE NAME
+    file_name = file_instance.name.split(
+        os.path.sep).pop().split(".").pop() + ext
+    file_path = settings.BASE_DIR / "temp" / file_name
+
+    # GET FILE CONTENTS
+    file_content = content.split(SEPARATOR)[-1].encode()
 
     # DECRYPT DATA
     dec = decipher(file_content.decode("utf-8"), key)
