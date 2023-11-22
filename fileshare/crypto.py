@@ -2,6 +2,8 @@ import os
 import base64
 from datetime import datetime
 from django.conf import settings
+from django.core.files import File
+from django.core.files.temp import NamedTemporaryFile
 from alpha.utilities import parse_date
 from base64 import b64encode, b64decode
 from cryptography.fernet import Fernet
@@ -62,28 +64,35 @@ def decipher(message, key):
         return 0
 
 
-def encrypt_file(key, file_name, path):
+def encrypt_file(key, file_instance):
     """
     Encrypt file. 
     The temporary encryption file is not deleted by this function!
     """
 
-    with open(path, "br") as binary_file:
-        # READ FILE
-        read_file = binary_file.read()
-        encoded_data = b64encode(read_file)
+    # ENCRYPTION KEY
+    key = generate_key(key)
+
+    # READ FILE
+    encoded_data = b64encode(file_instance.read())
 
     # CREATE FILE NAME TO WRITE
-    file_name += ".securefileshare"
-    file_path = settings.BASE_PATH / "temp" / file_name
+    og_file_name = file_instance.name.split(
+        os.path.sep).pop()
+    file_name = (og_file_name + ".securefileshare").replace(" ", "_")
+    file_path = os.path.join(settings.BASE_DIR, "temp", file_name)
 
-    with open(file_path, "bw") as write_file:
+    with open(file_path, "wb") as write_file:
         # WRITE META DATA
-        ext = path.split(os.path.sep).pop().split(".").pop()
-        meta = "{} | Encrypted By SecureFileShare (Lewis 2023) Made by Aashirwad Satshree Dristi, {} | {}\n".format(
+        ext = og_file_name.split(".").pop()  # GET FILE EXTENSION
+        meta = "{} | Encrypted By SecureFileShare (Lewis 2023) Made by Aashirwad Satshree Dristi, {} | {}".format(
+            # FILE EXTENSION
             ext,
+            # ENCRYPTED DATE
             parse_date(datetime.now(), format="%b. %m, %Y %H:%M:%S"),
-            encipher(key, generate_key("BACKUP")).decode("utf-8")
+            # ENCRYPT THE KEY WITH BACKUP KEY; used to recover key
+            encipher(key.decode("utf-8"),
+                     generate_key("BACKUP")).decode("utf-8")
         )
         write_file.write(meta.encode())
 
@@ -96,7 +105,10 @@ def encrypt_file(key, file_name, path):
         # WRITE ENCRYPTED DATA
         write_file.write(enc)
 
-    return file_path
+    # RETURN ENCRYPTED FILE
+    encrypted_file = File(file=open(file_path), name=file_name)
+
+    return encrypted_file
 
 
 def decrypt_file(key, file_name, path):

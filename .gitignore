@@ -1,6 +1,8 @@
 # Created by https://www.toptal.com/developers/gitignore/api/python,django,macos,linux,ssh
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,django,macos,linux,ssh
 
+temp/
+
 ### Django ###
 *.log
 *.pot

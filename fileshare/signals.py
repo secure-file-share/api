@@ -2,26 +2,33 @@ import os
 from django.db import models
 from django.conf import settings
 from django.dispatch import receiver
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from .models import Files, FileShare
+from .crypto import encrypt_file
 
 
 @receiver(models.signals.pre_save, sender=Files)
-def create_file_meta(sender, instance, **kwargs):
+def create_file_meta_and_encrypt(sender, instance, **kwargs):
     """
     Create meta data for file.
+    Also encrypt the file.
     """
 
-    file_name_split = instance.file_instance.url.split("/")[-1].split(".")
-    print(file_name_split)
+    # CREATE META DATA
+    file_name_split = instance.file_instance.url.split(
+        "/")[-1].split(".")
 
     if len(file_name_split[-1]) < 10:
         instance.ext = file_name_split.pop()
 
     if not instance.name:
-        instance.name = "_".join(file_name_split)
+        instance.name = "_".join(file_name_split).replace("%20", "_")
 
-    print(instance.name)
     instance.size = instance.file_instance.size
+
+    # ENCRYPT FILE
+    instance.file_instance = encrypt_file(
+        instance.organization.secret_key, instance.file_instance)
 
 
 @receiver(models.signals.post_delete, sender=Files)
