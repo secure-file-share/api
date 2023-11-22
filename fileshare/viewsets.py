@@ -1,9 +1,12 @@
-from django.db.models import Q
+from django.http import FileResponse
 from alpha.viewsets import BaseAuthViewSet
 from alpha.utilities import parse_request_body
 from client.models import User
 from .models import Files, FileShare
 from .serializers import FileShareSerializer  # , FileSerializer
+from .crypto import decrypt_file
+from .utilities import is_valid_uuid
+from .exceptions import EncryptionKeyMismatch
 
 
 class FileShareViewSet(BaseAuthViewSet):
@@ -38,17 +41,29 @@ class FileShareViewSet(BaseAuthViewSet):
     def retrieve(self, request, pk):
         try:
             # USE EITHER UNIQUE CODE OR PRIMARY KEY
-            file_share = FileShare.objects.get(Q(unique_code=pk) | Q(pk=pk))
+            if is_valid_uuid(pk):
+                file_share = FileShare.objects.get(pk=pk)
+            else:
+                file_share = FileShare.objects.get(unique_code=pk)
 
             # CHECK PERMISSION
-            if file_share.shared_to != request.user:
+            if request.user not in (file_share.shared_to, file_share.shared_by):
                 # ONLY ACCESS IF THIS FILE IS SHARED TO THE USER WHO REQUESTS
                 return self.error_response(message="You have no access to this file!", status=self.status.HTTP_401_UNAUTHORIZED)
 
-            # FILE SERIALIZED
-            file_serialized = FileShareSerializer(file_share).data
+            # GET KEY TO DECRYPT FILE
+            key = file_share.organization.secret_key
+
+            # DECRYPT FILE
+            decrypted_file = decrypt_file(key, file_share.file)
+
+            if decrypted_file == 0:
+                # KEY MISMATCH EXCEPTION
+                raise EncryptionKeyMismatch
         except FileShare.DoesNotExist:
             return self.error_response(message="The file does not exist!", status=self.status.HTTP_404_NOT_FOUND)
+        except EncryptionKeyMismatch as e:
+            return self.error_response(message=str(e))
         except Exception as e:
             print("-" * 100)
             print("Exception caught from 'fileshare.viewsets.FileShareViewSet.retrieve'")
@@ -57,7 +72,7 @@ class FileShareViewSet(BaseAuthViewSet):
 
             return self.error_response(message="Something went wrong", error=str(e))
         else:
-            return self.success_response(data=file_serialized)
+            return FileResponse(open(decrypted_file, "rb"))
 
     def create(self, request):
         try:
@@ -82,7 +97,11 @@ class FileShareViewSet(BaseAuthViewSet):
                 return self.error_response(message="You cannot share this file with this user", status=self.status.HTTP_403_FORBIDDEN)
 
             # CREATE FILE INSTANCE
-            file_obj = Files.objects.create(file_instance=file_instance)
+            file_obj = Files()
+            file_obj.file_instance = file_instance
+            file_obj.organization = shared_to.organization
+            file_obj.save()
+
             file_share = FileShare.objects.create(
                 file_instance=file_obj,
                 shared_to=shared_to

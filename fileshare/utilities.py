@@ -1,6 +1,7 @@
 import os
 import pytz
 from random import randint
+from uuid import UUID
 from django.conf import settings
 from datetime import datetime, timedelta
 # from alpha.utilities import random_string
@@ -28,3 +29,15 @@ def get_unique_code():
     # SO USERS CAN USE THIS CODE TO RETRIEVE FILE AS WELL
     """Returns random 6 digit code."""
     return randint(100000, 999999)
+
+
+def is_valid_uuid(uuid_to_test, version=4):
+    """
+    Check if uuid_to_test is a valid UUID.
+    """
+
+    try:
+        uuid_obj = UUID(uuid_to_test, version=version)
+    except ValueError:
+        return False
+    return str(uuid_obj) == uuid_to_test
