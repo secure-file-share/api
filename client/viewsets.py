@@ -66,7 +66,7 @@ class UserViewSet(BaseAuthViewSet):
 
             # SEARCH USERS WITHIN ORGANIZATION ONLY
             users = User.objects.filter(
-                id__in=organization.users.all().value_list("user", flat=True))
+                id__in=organization.users.all().values_list("user", flat=True))
 
             # SEARCH
             users_searched = users.filter(Q(username=query) | Q(email=query))
