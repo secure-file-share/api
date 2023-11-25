@@ -71,7 +71,7 @@ class FileSerializer(BaseSerializer):
         return {
             "datetime": parse_date(obj.expiration, "%b. %m, %Y %I:%M:%S %p"),
             "timestamp": int(obj.expiration.timestamp()),
-            "relative": relative_date(obj.expiration)
+            # "relative": relative_date(obj.expiration)
         }
 
 
