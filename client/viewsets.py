@@ -69,7 +69,11 @@ class UserViewSet(BaseAuthViewSet):
                 id__in=organization.users.all().values_list("user", flat=True))
 
             # SEARCH
-            users_searched = users.filter(Q(username=query) | Q(email=query))
+            if query:
+                users_searched = users.filter(
+                    Q(username=query) | Q(email=query))
+            else:
+                users_searched = users
 
             # SERIALIZED
             users_serialized = UserSerializer(users_searched, many=True).data
