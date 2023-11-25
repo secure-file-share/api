@@ -27,7 +27,7 @@ class BaseSerializer(serializers.ModelSerializer):
 
         try:
             datetime = parse_date(
-                value.created_at, format="%b. %d %Y, %H:%M:%S")
+                value.created_at, format="%b. %d, %Y %I:%M:%S %p")
         except:
             datetime = None
 
@@ -54,7 +54,7 @@ class BaseSerializer(serializers.ModelSerializer):
 
         try:
             datetime = parse_date(
-                value.updated_at, format="%b. %d %Y, %H:%M:%S")
+                value.updated_at, format="%b. %d, %Y %I:%M:%S %p")
         except:
             datetime = None
 
