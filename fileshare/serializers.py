@@ -1,6 +1,7 @@
 from django.urls import reverse
 from rest_framework import serializers
 from alpha.serializers import BaseSerializer
+from alpha.utilities import parse_date, relative_date
 from .models import Files, FileShare
 
 
@@ -10,6 +11,7 @@ class FileSerializer(BaseSerializer):
     size = serializers.SerializerMethodField("get_size")
     # shares = serializers.SerializerMethodField("get_shares")
     organization = serializers.SerializerMethodField("get_organization")
+    expiration = serializers.SerializerMethodField("get_expiration")
     uploaded_by = serializers.SerializerMethodField("get_uploaded_by")
 
     class Meta:
@@ -63,6 +65,13 @@ class FileSerializer(BaseSerializer):
             "id": str(obj.uploaded_by.id),
             "username": obj.uploaded_by.username,
             "fullname": obj.uploaded_by.full_name
+        }
+
+    def get_expiration(self, obj):
+        return {
+            "datetime": parse_date(obj.expiration, "%b. %m, %Y %I:%M:%S %p"),
+            "timestamp": int(obj.expiration.timestamp()),
+            "relative": relative_date(obj.expiration)
         }
 
 
