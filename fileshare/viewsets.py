@@ -1,4 +1,5 @@
-from django.http import FileResponse
+import os
+from django.http import HttpResponse  # , FileResponse
 from alpha.viewsets import BaseAuthViewSet
 from alpha.utilities import parse_request_body
 from client.models import User
@@ -72,7 +73,12 @@ class FileShareViewSet(BaseAuthViewSet):
 
             return self.error_response(message="Something went wrong", error=str(e))
         else:
-            return FileResponse(open(decrypted_file, "rb"))
+            response = HttpResponse(
+                decrypted_file, content_type='application/octet-stream')
+            response[
+                'Content-Disposition'] = f'attachment; filename="{decrypted_file.name.split(os.path.sep).pop()}"'
+
+            return response
 
     def create(self, request):
         try:

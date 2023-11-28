@@ -1,8 +1,10 @@
 import os
 import base64
+from io import BytesIO
 from datetime import datetime
 from django.conf import settings
 from django.core.files import File
+from django.core.files.base import ContentFile
 from alpha.utilities import parse_date
 from base64 import b64encode, b64decode
 from cryptography.fernet import Fernet
@@ -113,7 +115,6 @@ def encrypt_file(key, file_instance):
 def decrypt_file(key, file_instance):
     """
     Decrypt file.
-    The temporary decryption file is not deleted by this function!
     """
 
     # DECRYPTION KEY
@@ -133,7 +134,7 @@ def decrypt_file(key, file_instance):
     # CREATE ORIGINAL FILE NAME
     file_name = file_instance.name.split(
         os.path.sep).pop().split(".").pop() + ext
-    file_path = settings.BASE_DIR / "temp" / file_name
+    # file_path = settings.BASE_DIR / "temp" / file_name
 
     # GET FILE CONTENTS
     file_content = content.split(SEPARATOR)[-1].encode()
@@ -145,9 +146,7 @@ def decrypt_file(key, file_instance):
         # KEY MISMATCH
         raise Exception("Key Mismatch")
 
-    with open(file_path, "bw") as write_file:
+    file_contents = BytesIO(b64decode(dec))
+    content_file = ContentFile(file_contents.getvalue(), file_name)
 
-        # WRITE DECRYPTED DATA
-        write_file.write(b64decode(dec))
-
-    return file_path
+    return content_file
