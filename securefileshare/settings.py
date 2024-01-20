@@ -52,7 +52,7 @@ INSTALLED_APPS = [
     # THIRD PARTY APPS
     'corsheaders',
     'rest_framework',
-    'django_object_actions',
+    # 'django_object_actions',
 
     # CUSTOM APPS
     'alpha',

@@ -1,6 +1,6 @@
 # from django.http import FileResponse
 from django.contrib import admin  # , messages
-from django_object_actions import DjangoObjectActions
+# from django_object_actions import DjangoObjectActions
 from alpha.utilities import parse_date
 from .models import Files, FileShare
 # from .crypto import decrypt_file
@@ -21,7 +21,7 @@ from .models import Files, FileShare
 #         return False
 
 
-class FilesAdmin(DjangoObjectActions, admin.ModelAdmin):
+class FilesAdmin(admin.ModelAdmin):
     model = Files
 
     list_display = ("name", "ext", "file_size", "organization", "expiration")
@@ -60,7 +60,7 @@ class FilesAdmin(DjangoObjectActions, admin.ModelAdmin):
         return "{:0.2f} MB".format(obj.size/1024)
 
 
-class FileShareAdmin(DjangoObjectActions, admin.ModelAdmin):
+class FileShareAdmin(admin.ModelAdmin):
     model = FileShare
 
     list_display = ("unique_code", "file_name",
