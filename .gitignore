@@ -2,6 +2,7 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,django,macos,linux,ssh
 
 temp/
+.vercel/
 
 ### Django ###
 *.log
