@@ -46,8 +46,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # CLOUDINARY STORAGE
-    # 'cloudinary_storage',
-    # 'cloudinary',
+    'cloudinary_storage',
+    'cloudinary',
 
     # THIRD PARTY APPS
     'corsheaders',
@@ -167,7 +167,7 @@ MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 # CLOUDINARY
-USE_CLOUDINARY = False
+USE_CLOUDINARY = True
 CLOUDINARY_CLOUD_NAME = ''
 CLOUDINARY_API_KEY = ''
 CLOUDINARY_API_SECRET = ''
