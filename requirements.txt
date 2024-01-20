@@ -1,5 +1,5 @@
 asgiref==3.7.2
-Django==5.0.1
+Django==4.2.5
 django-cors-headers==4.3.1
 django-jazzmin==2.6.0
 django-threadlocals==0.10
