@@ -17,10 +17,10 @@ python -m pip install -r requirements.txt
 echo "Migrate database..."
 python manage.py migrate --noinput
 
-# Admin user
-echo "Create admin user..."
-python manage.py adminuser
-
 # Collect static files
 echo "Collecting static files..."
 python manage.py collectstatic --noinput -v 2
+
+# Admin user
+echo "Create admin user..."
+python manage.py adminuser
