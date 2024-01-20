@@ -14,9 +14,11 @@ echo "Building the project..."
 python -m pip install -r requirements.txt
 
 # Migrations
+echo "Migrate database..."
 python manage.py migrate --noinput
 
 # Admin user
+echo "Create admin user..."
 python manage.py adminuser
 
 # Collect static files
