@@ -35,7 +35,7 @@ SELF_HOST = os.environ.get("SELF_HOST", "")
 
 INSTALLED_APPS = [
     # JAZZMIN THEME FOR ADMIN
-    'jazzmin',
+    # 'jazzmin',
 
     # DJANGO APPS
     'django.contrib.admin',
@@ -208,13 +208,13 @@ except Exception as e:
     print("-" * 100)
 
 # JAZZMIN SETTINGS
-try:
-    from .jazzmin_ui_settings import *
-except Exception as e:
-    print("-" * 60)
-    print("Unable to import Jazzmin Settings")
-    print(str(e))
-    print("-" * 60)
+# try:
+#     from .jazzmin_ui_settings import *
+# except Exception as e:
+#     print("-" * 60)
+#     print("Unable to import Jazzmin Settings")
+#     print(str(e))
+#     print("-" * 60)
 
 # LOCAL SETTINGS
 try:
