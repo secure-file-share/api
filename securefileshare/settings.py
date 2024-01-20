@@ -184,12 +184,12 @@ except Exception as e:
     print("-" * 100)
 
 # LOG SETTINGS
-try:
-    from .log_settings import *
-except Exception as e:
-    print("-" * 100)
-    print("Unable to import Log Settings")
-    print("-" * 100)
+# try:
+#     from .log_settings import *
+# except Exception as e:
+#     print("-" * 100)
+#     print("Unable to import Log Settings")
+#     print("-" * 100)
 
 # REST FRAMEWORK SETTINGS
 try:
